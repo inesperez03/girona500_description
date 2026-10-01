@@ -1,0 +1,217 @@
+/girona500/controller/controller_manager:
+  ros__parameters:
+    update_rate: 100
+    common_controllers:
+    - thruster_test_controller
+    thruster_test_controller:
+      type: forward_command_controller/ForwardCommandController
+    imu_broadcaster:
+      type: sura_sensors/ImuBroadcaster
+    pressure_broadcaster:
+      type: sura_sensors/PressureBroadcaster
+    dvl75_velocity_broadcaster:
+      type: sura_sensors/DvlVelBroadcaster
+    dvl75_altitude_broadcaster:
+      type: sura_sensors/Dvl75AltitudeBroadcaster
+    gps_broadcaster:
+      type: sura_sensors/GpsBroadcaster
+    auv_controllers:
+    - body_force
+    - body_velocity
+    - position_hold
+    - stabilize
+    - depth_hold
+    body_force:
+      type: sura_controllers/auv/BodyForceController
+    body_velocity:
+      type: sura_controllers/auv/BodyVelocityController
+    position_hold:
+      type: sura_controllers/auv/PositionHoldController
+    stabilize:
+      type: sura_controllers/auv/StabilizeController
+    depth_hold:
+      type: sura_controllers/auv/DepthHoldController
+/girona500/controller/thruster_test_controller:
+  ros__parameters:
+    joints:
+    - girona500/base_to_thruster_0
+    - girona500/base_to_thruster_1
+    - girona500/base_to_thruster_2
+    - girona500/base_to_thruster_3
+    - girona500/base_to_thruster_4
+    interface_name: effort
+/girona500/controller/imu_broadcaster:
+  ros__parameters:
+    sensor_name: imu_sensor
+    frame_id: girona500/imu
+    topic_name: /girona500/controller/imu_broadcaster/imu
+/girona500/controller/pressure_broadcaster:
+  ros__parameters:
+    sensor_name: pressure_sensor
+    frame_id: girona500/pressure
+    topic_name: /girona500/sensors/pressure
+/girona500/controller/dvl75_velocity_broadcaster:
+  ros__parameters:
+    sensor_name: dvl_sensor
+    frame_id: girona500/dvl
+    topic_name: /girona500/sensors/dvl/twist
+/girona500/controller/dvl75_altitude_broadcaster:
+  ros__parameters:
+    sensor_name: dvl_sensor
+    frame_id: girona500/dvl_altitude
+    topic_name: /girona500/sensors/altitude
+/girona500/controller/gps_broadcaster:
+  ros__parameters:
+    sensor_name: gps_sensor
+    frame_id: girona500/gps
+    topic_name: /girona500/sensors/gps
+/girona500/controller/body_force:
+  ros__parameters:
+    debug.enabled: true
+    base_link: girona500/base_link
+    input_topic: /girona500/controller/body_force/command
+    output_topic: /girona500/controller/body_force/output
+    wrench_output_topic: /girona500/controller/body_force/wrench
+/girona500/controller/body_velocity:
+  ros__parameters:
+    debug.enabled: true
+    setpoint_topic: /girona500/controller/body_velocity/setpoint
+    navigator_topic: /girona500/navigator/navigation
+    feedforward_topic: /girona500/controller/depth_hold/feedforward
+    output_topic: /girona500/controller/body_velocity/output
+    pid_terms_topic: /girona500/controller/body_velocity/pid_terms
+    body_force_controller_name: body_force
+    kp_x: 30.0
+    ki_x: 6.0
+    kd_x: 0.0
+    antiwindup_x: 1.0
+    kp_y: 30.0
+    ki_y: 6.0
+    kd_y: 0.0
+    antiwindup_y: 1.0
+    kp_z: 80.0
+    ki_z: 20.0
+    kd_z: 0.0
+    antiwindup_z: 1.0
+    kp_roll: 0.2
+    ki_roll: 1.0
+    kd_roll: 0.0
+    antiwindup_roll: 1.0
+    kp_pitch: 0.2
+    ki_pitch: 1.0
+    kd_pitch: 0.0
+    antiwindup_pitch: 1.0
+    kp_yaw: 1.0
+    ki_yaw: 0.0
+    kd_yaw: 0.0
+    antiwindup_yaw: 1.0
+/girona500/controller/position_hold:
+  ros__parameters:
+    debug.enabled: true
+    setpoint_topic: /girona500/controller/position_hold/setpoint
+    feedforward_topic: /girona500/controller/position_hold/feedforward
+    navigator_topic: /girona500/navigator/navigation
+    output_topic: /girona500/controller/position_hold/output
+    pid_terms_topic: /girona500/controller/position_hold/pid_terms
+    body_velocity_controller_name: body_velocity
+    body_velocity_setpoint_topic: /girona500/controller/body_velocity/setpoint
+    setpoint_frame_id: world_ned
+    kp_x: 1.0
+    ki_x: 0.0
+    kd_x: 0.0
+    antiwindup_x: 0.5
+    kp_y: 1.0
+    ki_y: 0.0
+    kd_y: 0.0
+    antiwindup_y: 0.5
+    kp_z: 1.0
+    ki_z: 0.1
+    kd_z: 0.0
+    antiwindup_z: 0.5
+    kp_roll: 0.0
+    ki_roll: 0.005
+    kd_roll: 0.0
+    antiwindup_roll: 0.5
+    kp_pitch: 0.0
+    ki_pitch: 0.002
+    kd_pitch: 0.0
+    antiwindup_pitch: 0.5
+    kp_yaw: 0.0
+    ki_yaw: 0.005
+    kd_yaw: 0.0
+    antiwindup_yaw: 0.5
+    linear_feedforward_threshold: 0.001
+    angular_feedforward_threshold: 0.001
+    feedforward_timeout: 0.25
+/girona500/controller/stabilize:
+  ros__parameters:
+    debug.enabled: true
+    feedforward_topic: /girona500/controller/stabilize/feedforward
+    navigator_topic: /girona500/navigator/navigation
+    setpoint_topic: /girona500/controller/stabilize/set_point
+    output_topic: /girona500/controller/stabilize/output
+    pid_terms_topic: /girona500/controller/stabilize/pid_terms
+    body_force_controller_name: body_force
+    body_force_command_topic: /girona500/controller/body_force/command
+    enable_roll_pitch_service_name: /girona500/controller/stabilize/enable_roll_pitch
+    disable_roll_pitch_service_name: /girona500/controller/stabilize/disable_roll_pitch
+    allow_roll_pitch: false
+    feedforward_gain_x: 1.0
+    feedforward_gain_y: 1.0
+    feedforward_gain_z: 1.0
+    feedforward_gain_roll: 1.0
+    feedforward_gain_pitch: 1.0
+    feedforward_gain_yaw: 1.0
+    kp_roll: 4.0
+    ki_roll: 1.0
+    kd_roll: 0.0
+    antiwindup_roll: 0.5
+    kp_pitch: 4.0
+    ki_pitch: 1.0
+    kd_pitch: 0.0
+    antiwindup_pitch: 0.5
+    kp_yaw: 4.0
+    ki_yaw: 1.0
+    kd_yaw: 0.0
+    antiwindup_yaw: 0.5
+    yaw_command_threshold: 0.001
+    roll_command_threshold: 0.001
+    pitch_command_threshold: 0.001
+/girona500/controller/depth_hold:
+  ros__parameters:
+    debug.enabled: true
+    feedforward_topic: /girona500/controller/depth_hold/feedforward
+    navigator_topic: /girona500/navigator/navigation
+    setpoint_topic: /girona500/controller/depth_hold/set_point
+    output_topic: /girona500/controller/depth_hold/output
+    pid_terms_topic: /girona500/controller/depth_hold/pid_terms
+    body_force_controller_name: body_force
+    body_force_command_topic: /girona500/controller/body_force/command
+    enable_roll_pitch_service_name: /girona500/controller/depth_hold/enable_roll_pitch
+    disable_roll_pitch_service_name: /girona500/controller/depth_hold/disable_roll_pitch
+    allow_roll_pitch: false
+    feedforward_gain_x: 1.0
+    feedforward_gain_y: 1.0
+    feedforward_gain_z: 1.0
+    feedforward_gain_roll: 1.0
+    feedforward_gain_pitch: 1.0
+    feedforward_gain_yaw: 1.0
+    kp_roll: 2.0
+    ki_roll: 0.1
+    kd_roll: 0.0
+    antiwindup_roll: 0.5
+    kp_pitch: 2.0
+    ki_pitch: 0.1
+    kd_pitch: 0.0
+    antiwindup_pitch: 0.5
+    kp_yaw: 3.0
+    ki_yaw: 0.0
+    kd_yaw: 0.0
+    antiwindup_yaw: 0.5
+    kp_depth: 30.0
+    ki_depth: 3.0
+    kd_depth: 0.0
+    depth_bias_force: 15.0
+    antiwindup_depth: 0.5
+    command_threshold: 0.001
+    depth_command_threshold: 0.001

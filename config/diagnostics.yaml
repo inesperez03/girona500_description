@@ -1,0 +1,4 @@
+diagnostics: {}
+sensors: {}
+aggregator:
+  enabled: false

@@ -1,0 +1,42 @@
+robot:
+  name: girona500
+  family: underwater
+  environment: sim
+  localization: sim
+
+description:
+  package: girona500_description
+  xacro: urdf/girona500.urdf.xacro
+  arms: auv
+
+ros2_control:
+  params_package: girona500_description
+  params: config/ros2_control_params.yaml
+
+diagnostics:
+  params_package: girona500_description
+  params: config/diagnostics.yaml
+
+cameras:
+  down_camera:
+    enabled: true
+    driver: usb_cam
+    aruco: true
+  front_camera:
+    enabled: false
+    driver: usb_cam
+    aruco: false
+  right_camera:
+    enabled: false
+    driver: gstreamer
+    aruco: false
+
+imu:
+  raw_imu_topic: controller/imu_broadcaster/imu
+  filtered_imu_topic: sensors/imu
+  mag_topic: controller/magnetometer_broadcaster/mag
+
+localization:
+  launch_package: sura_localization
+  launch_file: cirtesu_auv_localization.launch.py
+  publish_tf: true

@@ -1,0 +1,230 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="$(arg robot_name)" family="underwater">
+  <xacro:arg name="robot_name" default="girona500" />
+  <xacro:arg name="environment" default="sim" />
+
+  <!-- Vehicle -->
+  <link name="$(arg robot_name)/base_link" tf_type="base">
+    <visual>
+      <origin rpy="-1.57 0 3.14" xyz="0.7 0 0.4" />
+      <geometry>
+        <mesh filename="package://girona500_description/meshes/girona500.dae" />
+      </geometry>
+    </visual>
+  </link>
+
+
+  <!-- Sensors -->
+  <link name="$(arg robot_name)/dvl" tf_type="sensor" />
+  <joint name="$(arg robot_name)/base_to_dvl" type="fixed">
+    <parent link="$(arg robot_name)/base_link" />
+    <child link="$(arg robot_name)/dvl" />
+    <origin rpy="3.1416 0.0000 -0.7854" xyz="-0.643 0.000 0.538" />
+  </joint>
+  <link name="$(arg robot_name)/dvl_altitude" tf_type="sensor" />
+  <joint name="$(arg robot_name)/base_to_dvl_altitude" type="fixed">
+    <parent link="$(arg robot_name)/dvl" />
+    <child link="$(arg robot_name)/dvl_altitude" />
+    <origin rpy="0 1.5708 0" xyz="0 0 0" />
+  </joint>
+  <link name="$(arg robot_name)/gps" tf_type="sensor" />
+  <joint name="$(arg robot_name)/base_to_gps" type="fixed">
+    <parent link="$(arg robot_name)/base_link" />
+    <child link="$(arg robot_name)/gps" />
+    <origin rpy="0 0 0" xyz="-0.436 -0.350 -0.657" />
+  </joint>
+  <link name="$(arg robot_name)/imu" tf_type="sensor" />
+  <joint name="$(arg robot_name)/base_to_imu" type="fixed">
+    <parent link="$(arg robot_name)/base_link" />
+    <child link="$(arg robot_name)/imu" />
+    <origin rpy="1.5708 0 0" xyz="0.076 0.372 -0.301" />
+  </joint>
+  <link name="$(arg robot_name)/imu_filter" tf_type="sensor" />
+  <joint name="$(arg robot_name)/base_to_imu_filter" type="fixed">
+    <parent link="$(arg robot_name)/base_link" />
+    <child link="$(arg robot_name)/imu_filter" />
+    <origin rpy="0 0 0" xyz="0.076 0.372 -0.301" />
+  </joint>
+  <link name="$(arg robot_name)/pressure" tf_type="sensor" />
+  <joint name="$(arg robot_name)/base_to_pressure" type="fixed">
+    <parent link="$(arg robot_name)/base_link" />
+    <child link="$(arg robot_name)/pressure" />
+    <origin rpy="0 0 0" xyz="0.076 0.372 -0.301" />
+  </joint>
+  
+  <!-- Thrusters -->
+  <link name="$(arg robot_name)/thruster_0" tf_type="thruster" />
+  <joint name="$(arg robot_name)/base_to_thruster_0" type="fixed">
+    <parent link="$(arg robot_name)/base_link" />
+    <child link="$(arg robot_name)/thruster_0" />
+    <origin rpy="0 0 3.1416" xyz="-0.355 0.261 0.020" />
+  </joint>
+  <link name="$(arg robot_name)/thruster_1" tf_type="thruster" />
+  <joint name="$(arg robot_name)/base_to_thruster_1" type="fixed">
+    <parent link="$(arg robot_name)/base_link" />
+    <child link="$(arg robot_name)/thruster_1" />
+    <origin rpy="0 0 3.1416" xyz="-0.355 -0.261 0.020" />
+  </joint>
+  <link name="$(arg robot_name)/thruster_2" tf_type="thruster" />
+  <joint name="$(arg robot_name)/base_to_thruster_2" type="fixed">
+    <parent link="$(arg robot_name)/base_link" />
+    <child link="$(arg robot_name)/thruster_2" />
+    <origin rpy="0 1.5708 0" xyz="0.530 0 -0.310" />
+  </joint>
+  <link name="$(arg robot_name)/thruster_3" tf_type="thruster" />
+  <joint name="$(arg robot_name)/base_to_thruster_3" type="fixed">
+    <parent link="$(arg robot_name)/base_link" />
+    <child link="$(arg robot_name)/thruster_3" />
+    <origin rpy="0 1.5708 0" xyz="-0.585 0 -0.310" />
+  </joint>
+  <link name="$(arg robot_name)/thruster_4" tf_type="thruster" />
+  <joint name="$(arg robot_name)/base_to_thruster_4" type="fixed">
+    <parent link="$(arg robot_name)/base_link" />
+    <child link="$(arg robot_name)/thruster_4" />
+    <origin rpy="0 0 -1.5708" xyz="0 0 0" />
+  </joint>
+
+  <!-- Cameras -->
+  <link name="$(arg robot_name)/camera_front" tf_type="sensor" />
+  <joint name="$(arg robot_name)/base_to_camera_front" type="fixed">
+    <parent link="$(arg robot_name)/base_link" />
+    <child link="$(arg robot_name)/camera_front" />
+    <origin rpy="1.57 0 1.2" xyz="0.38 0.1 0.1" />
+  </joint>
+
+  <link name="$(arg robot_name)/camera_down" tf_type="sensor"/>
+  <joint name="$(arg robot_name)/camera_down_joint" type="fixed">
+    <parent link="$(arg robot_name)/base_link"/>
+    <child link="$(arg robot_name)/camera_down"/>
+    <origin rpy="0 0 0" xyz="0.2 -0.048 0.76" />
+  </joint>
+
+  <link name="$(arg robot_name)/camera_down/optical_frame" tf_type="sensor"/>
+  <joint name="$(arg robot_name)/camera_down_optical_frame_joint" type="fixed">
+    <parent link="$(arg robot_name)/camera_down"/>
+    <child link="$(arg robot_name)/camera_down/optical_frame"/>
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 1.57"/>
+  </joint>
+
+  <!-- <link name="$(arg robot_name)/xiroi/stereo_ch3/left_optical" tf_type="sensor" />
+  <joint name="$(arg robot_name)/base_to_xiroi_stereo_ch3_left_optical" type="fixed">
+    <parent link="$(arg robot_name)/base_link" />
+    <child link="$(arg robot_name)/xiroi/stereo_ch3/left_optical" />
+    <origin rpy="0 0 1.5707963267948966" xyz="0.2 -0.048 0.76" />
+  </joint>
+  <link name="$(arg robot_name)/xiroi/stereo_ch3/right_optical" tf_type="sensor" />
+  <joint name="$(arg robot_name)/base_to_xiroi_stereo_ch3_right_optical" type="fixed">
+    <parent link="$(arg robot_name)/base_link" />
+    <child link="$(arg robot_name)/xiroi/stereo_ch3/right_optical" />
+    <origin rpy="0 0 1.5707963267948966" xyz="0.2 0.048 0.76" />
+  </joint> -->
+  <!-- ROS 2 control: simulation defaults; real thruster channels require vehicle-specific configuration. -->
+  <ros2_control name="$(arg robot_name)_thrusters" type="system">
+    <hardware>
+      <plugin>sura_hardware_interface/ThrustersSystem</plugin>
+      <param name="environment">$(arg environment)</param>
+    </hardware>
+
+    <joint name="$(arg robot_name)/base_to_thruster_0">
+      <command_interface name="effort"/>
+      <state_interface name="effort"/>
+      <param name="lookup_csv">config/t200_lookup.csv</param>
+      <param name="stonefish_topic">/$(arg robot_name)/controller/thruster_setpoints_sim</param>
+    </joint>
+    <joint name="$(arg robot_name)/base_to_thruster_1">
+      <command_interface name="effort"/>
+      <state_interface name="effort"/>
+      <param name="lookup_csv">config/t200_lookup.csv</param>
+      <param name="stonefish_topic">/$(arg robot_name)/controller/thruster_setpoints_sim</param>
+    </joint>
+    <joint name="$(arg robot_name)/base_to_thruster_2">
+      <command_interface name="effort"/>
+      <state_interface name="effort"/>
+      <param name="lookup_csv">config/t200_lookup.csv</param>
+      <param name="stonefish_topic">/$(arg robot_name)/controller/thruster_setpoints_sim</param>
+    </joint>
+    <joint name="$(arg robot_name)/base_to_thruster_3">
+      <command_interface name="effort"/>
+      <state_interface name="effort"/>
+      <param name="lookup_csv">config/t200_lookup.csv</param>
+      <param name="stonefish_topic">/$(arg robot_name)/controller/thruster_setpoints_sim</param>
+    </joint>
+    <joint name="$(arg robot_name)/base_to_thruster_4">
+      <command_interface name="effort"/>
+      <state_interface name="effort"/>
+      <param name="lookup_csv">config/t200_lookup.csv</param>
+      <param name="stonefish_topic">/$(arg robot_name)/controller/thruster_setpoints_sim</param>
+    </joint>
+  </ros2_control>
+
+  <ros2_control name="$(arg robot_name)_sensors" type="system">
+    <hardware>
+      <plugin>sura_hardware_interface/SensorsSystem</plugin>
+      <param name="environment">$(arg environment)</param>
+    </hardware>
+
+    <sensor name="imu_sensor">
+      <param name="interface">sura_hardware_interface/ImuInterface</param>
+      <param name="broadcaster">imu_broadcaster</param>
+      <param name="read_rate_hz">100.0</param>
+      <param name="frame_id">$(arg robot_name)/imu</param>
+      <param name="stonefish_topic">/$(arg robot_name)/stonefish/sensors/imu</param>
+      <param name="msg_type">sensor_msgs/msg/Imu</param>
+      <state_interface name="orientation.x"/>
+      <state_interface name="orientation.y"/>
+      <state_interface name="orientation.z"/>
+      <state_interface name="orientation.w"/>
+      <state_interface name="angular_velocity.x"/>
+      <state_interface name="angular_velocity.y"/>
+      <state_interface name="angular_velocity.z"/>
+      <state_interface name="linear_acceleration.x"/>
+      <state_interface name="linear_acceleration.y"/>
+      <state_interface name="linear_acceleration.z"/>
+      <state_interface name="sample_time.sec"/>
+      <state_interface name="sample_time.nanosec"/>
+    </sensor>
+
+    <sensor name="pressure_sensor">
+      <param name="interface">sura_hardware_interface/PressureInterface</param>
+      <param name="broadcaster">pressure_broadcaster</param>
+      <param name="read_rate_hz">50.0</param>
+      <param name="frame_id">$(arg robot_name)/pressure</param>
+      <param name="stonefish_topic">/$(arg robot_name)/stonefish/sensors/pressure</param>
+      <param name="msg_type">sensor_msgs/msg/FluidPressure</param>
+      <state_interface name="fluid_pressure"/>
+    </sensor>
+
+    <sensor name="dvl_sensor">
+      <param name="interface">sura_hardware_interface/DvlInterface</param>
+      <param name="broadcaster">dvl75_velocity_broadcaster</param>
+      <param name="broadcaster">dvl75_altitude_broadcaster</param>
+      <param name="read_rate_hz">20.0</param>
+      <param name="frame_id">$(arg robot_name)/dvl</param>
+      <param name="stonefish_topic">/$(arg robot_name)/stonefish/sensors/dvl</param>
+      <param name="stonefish_altitude_topic">/$(arg robot_name)/stonefish/sensors/dvl_altitude</param>
+      <param name="stonefish_gps_topic">/$(arg robot_name)/stonefish/sensors/gps</param>
+      <param name="msg_type">geometry_msgs/msg/TwistStamped</param>
+      <state_interface name="linear_velocity.x"/>
+      <state_interface name="linear_velocity.y"/>
+      <state_interface name="linear_velocity.z"/>
+      <state_interface name="angular_velocity.x"/>
+      <state_interface name="angular_velocity.y"/>
+      <state_interface name="angular_velocity.z"/>
+      <state_interface name="distance_z"/>
+      <state_interface name="confidence"/>
+    </sensor>
+
+    <sensor name="gps_sensor">
+      <param name="interface">sura_hardware_interface/GpsInterface</param>
+      <param name="broadcaster">gps_broadcaster</param>
+      <param name="read_rate_hz">1.0</param>
+      <param name="frame_id">$(arg robot_name)/gps</param>
+      <param name="stonefish_topic">/$(arg robot_name)/stonefish/sensors/gps</param>
+      <param name="msg_type">sensor_msgs/msg/NavSatFix</param>
+      <state_interface name="gps.latitude"/>
+      <state_interface name="gps.longitude"/>
+      <state_interface name="gps.altitude"/>
+      <state_interface name="gps.valid"/>
+    </sensor>
+  </ros2_control>
+</robot>
